@@ -1,0 +1,15 @@
+{
+  "name": "gitron",
+  "version": "0.0.1",
+  "description": "Git GUI made with Electron",
+  "main": "index.js",
+  "author": "Thiago Nuic Vidigal",
+  "license": "ISC",
+  "dependencies": {
+    "nodegit": "0.4.1",
+    "electron-prebuilt": "^0.33.0"
+  },
+  "engines": {
+    "atom-shell": "0.33.0"
+  }
+}
