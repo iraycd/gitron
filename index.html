@@ -1,55 +1,72 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Hello World!</title>
-    <script type="text/javascript">
-      var NodeGit = require("nodegit");
-      var repoPath = "/Users/thiago/Projects/repositorios/cep";
 
-      NodeGit.Repository.open(repoPath).then(function(repo) {
-        repo.getStatus().then(function(status) {
-          console.log(status);
-        });
-        repo.getMasterCommit().then(function(firstCommitOnMaster) {
-          // Create a new history event emitter.
-          var history = firstCommitOnMaster.history();
+<head>
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css" media="screen" charset="utf-8">
 
-          // Create a counter to only show up to 9 entries.
-          var count = 0;
+  <script type="text/javascript">
+    var NodeGit = require("nodegit");
 
-          // Listen for commit events from the history.
+    function showTree() {
+      var repoPath = document.getElementById("path").value;
+      NodeGit.Repository.open(repoPath)
+        .then(function(repo) {
+          return repo.getMasterCommit();
+        })
+        .then(function(firstCommitOnMaster) {
+          return firstCommitOnMaster.getTree();
+        })
+        .then(function(tree) {
+          // `walk()` returns an event.
+          var walker = tree.walk();
+          walker.on("entry", function(entry) {
+            console.log(entry.path());
+          });
+
+          // Don't forget to call `start()`!
+          walker.start();
+        })
+        .done();
+    }
+
+    function showLog() {
+      var repoPath = document.getElementById("path").value;
+      NodeGit.Repository.open(repoPath)
+        .then(function(repo) {
+          return repo.getMasterCommit();
+        })
+        .then(function(firstCommitOnMaster) {
+          // History returns an event.
+          var history = firstCommitOnMaster.history(NodeGit.Revwalk.SORT.Time);
+
+          // History emits "commit" event for each commit in the branch's history
           history.on("commit", function(commit) {
-            // Disregard commits past 9.
-            if (++count >= 9) {
-              return;
-            }
-
-            // Show the commit sha.
             console.log("commit " + commit.sha());
-
-            // Store the author object.
-            var author = commit.author();
-
-            // Display author information.
-            console.log("Author:\t" + author.name() + " <" + author.email() + ">");
-
-            // Show the commit date.
-            console.log("Date:\t" + commit.date());
-
-            // Give some space and show the message.
+            console.log("Author:", commit.author().name() +
+              " <" + commit.author().email() + ">");
+            console.log("Date:", commit.date());
             console.log("\n    " + commit.message());
           });
 
-          // Start emitting events.
+          // Don't forget to call `start()`!
           history.start();
-        });
-      }).done();
-    </script>
-  </head>
-  <body>
-    <h1>Console</h1>
-    <div id="console" style="height: 200px"></div>
-    <h1>Error console</h1>
-    <div id="errorConsole" style="height: 200px"></div>
-  </body>
+        })
+        .done();
+    }
+  </script>
+</head>
+
+<body>
+  <input type="text" id="path">
+  <button type="button" onclick="showLog()">Log</button>
+  <button type="button" onclick="showTree()">Tree</button>
+
+
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="node_modules/angular/angular.js"></script>
+
+</body>
 </html>
