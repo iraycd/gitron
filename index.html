@@ -59,12 +59,13 @@
 </head>
 
 <body>
-  <input type="text" id="path">
+  <input type="text" id="path" value="/Users/thiago/Projects/logann/9027_syncscale">
   <button type="button" onclick="showLog()">Log</button>
   <button type="button" onclick="showTree()">Tree</button>
 
-
-  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script type="text/javascript">
+    window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery');
+  </script>
   <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
   <script src="node_modules/angular/angular.js"></script>
 
