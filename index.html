@@ -2,72 +2,31 @@
 <html>
 
 <head>
-  <title>Hello World!</title>
+  <title>Gitron</title>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css" media="screen" charset="utf-8">
-
-  <script type="text/javascript">
-    var NodeGit = require("nodegit");
-
-    function showTree() {
-      var repoPath = document.getElementById("path").value;
-      NodeGit.Repository.open(repoPath)
-        .then(function(repo) {
-          return repo.getMasterCommit();
-        })
-        .then(function(firstCommitOnMaster) {
-          return firstCommitOnMaster.getTree();
-        })
-        .then(function(tree) {
-          // `walk()` returns an event.
-          var walker = tree.walk();
-          walker.on("entry", function(entry) {
-            console.log(entry.path());
-          });
-
-          // Don't forget to call `start()`!
-          walker.start();
-        })
-        .done();
-    }
-
-    function showLog() {
-      var repoPath = document.getElementById("path").value;
-      NodeGit.Repository.open(repoPath)
-        .then(function(repo) {
-          return repo.getMasterCommit();
-        })
-        .then(function(firstCommitOnMaster) {
-          // History returns an event.
-          var history = firstCommitOnMaster.history(NodeGit.Revwalk.SORT.Time);
-
-          // History emits "commit" event for each commit in the branch's history
-          history.on("commit", function(commit) {
-            console.log("commit " + commit.sha());
-            console.log("Author:", commit.author().name() +
-              " <" + commit.author().email() + ">");
-            console.log("Date:", commit.date());
-            console.log("\n    " + commit.message());
-          });
-
-          // Don't forget to call `start()`!
-          history.start();
-        })
-        .done();
-    }
-  </script>
+  <link rel="stylesheet" href="node_modules/ng-dialog/css/ngDialog.min.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="node_modules/ng-dialog/css/ngDialog-theme-default.min.css" media="screen" charset="utf-8">
 </head>
 
-<body>
-  <input type="text" id="path" value="/Users/thiago/Projects/logann/9027_syncscale">
-  <button type="button" onclick="showLog()">Log</button>
-  <button type="button" onclick="showTree()">Tree</button>
+<body ng-app="gitron">
+  <app-repository-list></app-repository-list>
+
+  <div ui-view></div>
 
   <script type="text/javascript">
     window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery');
   </script>
   <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
   <script src="node_modules/angular/angular.js"></script>
+  <script src="node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="node_modules/angular-local-storage/dist/angular-local-storage.js"></script>
+  <script src="node_modules/ng-dialog/js/ngDialog.js"></script>
 
+  <script src="src/app.js"></script>
+  <script src="src/route.js"></script>
+  <script src="src/service/repository.service.js"></script>
+  <script src="src/log/log.directive.js"></script>
+  <script src="src/repository/repository-list.directive.js"></script>
 </body>
 </html>

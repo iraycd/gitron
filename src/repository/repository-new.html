@@ -1,0 +1,14 @@
+<form ng-submit="vm.addAndClose()">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" ng-model="vm.repository.name" class="form-control" id="name" placeholder="Name of the repository" required>
+  </div>
+  <div class="form-group">
+    <label for="location">Location</label>
+    <input type="text" class="form-control" ng-model="vm.repository.location" id="location" placeholder="Location of the repository in the computer" required>
+  </div>
+  <div class="text-center">
+    <button type="submit" class="btn btn-success">Add</button>
+    <button type="button" class="btn btn-danger">Cancel</button>
+  </div>
+</form>

@@ -1,0 +1,6 @@
+<select ng-options="repo.name for repo in vm.repositoryList track by repo.name"
+        ng-model="vm.selectedRepository"
+        ng-change="vm.updateSelectedRepository()">
+</select>
+<button type="button" ng-click="vm.addRepository()">+</button>
+<button type="button">X</button>
